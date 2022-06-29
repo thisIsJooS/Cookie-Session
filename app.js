@@ -17,8 +17,10 @@ app.use("/", indexRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
-  error.status = 404;
-  next(error);
+  if (req.url !== "/favicon.ico") {
+    error.status = 404;
+    next(error);
+  }
 });
 
 app.use((err, req, res, next) => {
