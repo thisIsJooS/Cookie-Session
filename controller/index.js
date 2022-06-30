@@ -3,8 +3,11 @@ const fs = require("fs");
 exports.main = function (req, res, next) {
   res.setHeader("Domi", "Thiem");
   res.setHeader("Set-Cookie", "mycookie=test");
-  res.cookie("hana", "card");
-  res.clearCookie("hana");
+  //   res.cookie("hana", "card");
+  //   res.clearCookie("hana");
+  console.log(req.cookies); // cookie-parser 모듈을 통해 쿠키가 저장됨
+  console.log(req.signedCookies); // 서명된 쿠키는 이곳에 저장됨
+  console.log(req.sessionID); // 현재 세션의 아이디
   res.render("home");
 };
 
@@ -70,4 +73,19 @@ exports.sessionTest = function (req, res, next) {
     // 세션쿠키가 클라이언트에 저장이 되어있는데 서버를 재시작하여 서버상 session에 아무것도 들어있지 않을 때
     return res.render("home");
   }
+};
+
+exports.createCookie = function (req, res, next) {
+  res.cookie("NIVEA", "STRAWBERRY", {
+    expires: new Date(Date.now() + 900000),
+    httpOnly: true,
+    secure: true,
+    signed: true, // 서명된 쿠키
+  });
+  return res.render("home");
+};
+
+exports.removeCookie = function (req, res, next) {
+  res.clearCookie("NIVEA", "STRAWBERRY");
+  return res.render("home");
 };
